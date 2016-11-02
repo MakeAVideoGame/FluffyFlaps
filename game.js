@@ -2,7 +2,7 @@
 Game Constants. They are tuned so it's somewhat playable, but you can modify them if you want to see what effects they have.
 */
 const gravity = 0.8;
-const spawnFrequency = 0.1;
+const spawnFrequency = 1; // probability of obstacles spawning for each slot. 0 = no obstacles; 1 = obstacles in every possible slot
 const speed = 0.3; //horizontal Speed/Speed of obstacles
 const speedBoost = 20;//vertical speed gained by tapping
 
@@ -19,6 +19,7 @@ let oldTime = Date.now();
 let eventQueue = [];
 let obstacles = [];
 let bird = {};
+let timeAccumulator = 0;
 
 /*
 Subscribe to relevant events
@@ -72,6 +73,8 @@ function update(deltaT){
 
 	}
 
+	timeAccumulator += deltaT;
+
 	/*
 	Update all active obstacles and remove inactive ones
 	*/
@@ -112,6 +115,13 @@ function update(deltaT){
 	}
 
 
+	if(timeAccumulator > 100){
+		var rnd = Math.random();
+		if(rnd < spawnFrequency){
+			spawnObstacle(height * 0.3, height * 0.7);
+			timeAccumulator = 0;
+		}
+	}
 	/*
 	Do collision detection
 	*/
@@ -133,14 +143,20 @@ function render(){
 	ctx.stroke();
 
 	/*
-	Draw obstacles
+	Draw upper and lower parts for all obstacles
 	*/
 	for(var i = 0; i < obstacles.length; i++){
 		ctx.beginPath();
-		ctx.moveTo(obstacles[i].xPos, height - obstacles[i].lower);
-		ctx.lineTo(obstacles[i].xPos, height);
-		ctx.moveTo(obstacles[i].xPos, 0);
-		ctx.lineTo(obstacles[i].xPos, height - obstacles[i].upper);
+		ctx.moveTo(obstacles[i].xPos - 10, height);
+		ctx.lineTo(obstacles[i].xPos - 10, height - obstacles[i].lower);
+		ctx.lineTo(obstacles[i].xPos + 10, height - obstacles[i].lower);
+		ctx.lineTo(obstacles[i].xPos + 10, height);
+
+
+		ctx.moveTo(obstacles[i].xPos - 10, 0);
+		ctx.lineTo(obstacles[i].xPos - 10, height - obstacles[i].upper);
+		ctx.lineTo(obstacles[i].xPos + 10, height - obstacles[i].upper);
+		ctx.lineTo(obstacles[i].xPos + 10, 0);
 		ctx.stroke();
 	}
 }
