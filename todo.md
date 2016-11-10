@@ -4,3 +4,8 @@
 - add support for other canvas sizes (-> make velocities, gravity, etc relative sizes (right now they are in pixels per second))
 - use object pooling for obstacles
 - use ECMAscript 6 classes for better maintainability
+- create background sprites for parallax background
+- create some particle sprites for various effects (crash, flapping (feathers?), ...)
+- create additional birds
+- improve/remake existing sprites
+- add gamestate stuff for menu screen, game over screen, ingame screen, etc
